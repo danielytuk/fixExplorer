@@ -30,4 +30,15 @@ Clear-Directory -Path $customDestinationsPath
 # Empty the Recycle Bin
 Clear-RecycleBin -Force
 
+# Clear DNS cache
+ipconfig /flushdns
+
+# Clean temporary files
+$cleanmgr = New-Object -ComObject Shell.Application
+$cleanmgr.NameSpace(0xA).Items() | ForEach-Object { $_.InvokeVerb('delete') }
+
+# Restart File Explorer
+Stop-Process -Name explorer -Force
+Start-Process explorer
+
 Write-Host "Temporary files cleared and Recycle Bin emptied."
